@@ -3,7 +3,24 @@
 import time
 from threading import Thread
 
-from constants import *
+# Try to use the path passed in as first argument as the config
+# file. If no argument is passed in, just import constants from
+# the current directory.
+import sys
+import os
+
+configfile = None
+try:
+    configfile = sys.argv[1]
+except IndexError:
+    # No config file, import the defaults
+    from constants import *
+if configfile:
+    if not os.path.exists(configfile):
+        print "Can't find config path."
+        quit()
+    sys.path.append(os.path.dirname(os.path.expanduser(configfile)))
+    from config import *
 
 import pymumble
 from pymumble.constants import *
